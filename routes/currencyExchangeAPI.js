@@ -1,6 +1,7 @@
 var express = require('express');
 var { mongoose } = require('mongoose');
 var { latestCurrencyModel } = require('../schemas/currencySchema.js')
+var { testFunction } = require('../serviceWorkers/currencyExchangeRatesAPI.js')
 var router = express.Router();
 
 /* GET latest currency rates. */
@@ -11,6 +12,7 @@ router.get('/latest', function(req, res, next) {
     base: "USD",
   })
   console.log(example.base)
+  testFunction();
   example.save(function(err, exmaple) {
     if (err) { return console.log(err)}
   });

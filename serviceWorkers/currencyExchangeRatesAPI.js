@@ -1,14 +1,21 @@
 var axios = require('axios');
-const { response } = require('../app');
+var { latestCurrencyModel } = require('../schemas/currencySchema.js')
 
-const testFunction = (base="USD") => {
+/*
+    Should be run every start of an hour
+*/
+const retrieveLatestCurrencyData = (base="USD") => {
     axios.get('https://openexchangerates.org/api/latest.json', {
         params: {
             app_id: process.env.APP_ID,
             base: base
         }
     }).then(function (response){
-        console.log(response.data)
+        const latestCurrencyData = latestCurrencyModel(response.data)
+        latestCurrencyData.save((err, example) => {
+            if (err) { return console.log(err)}
+            else {console.log(example)}
+        })
 
     }).catch(function (error) {
         console.log(error);
@@ -16,4 +23,4 @@ const testFunction = (base="USD") => {
 }
 
 
-module.exports.testFunction = testFunction;
+module.exports.retrieveLatestCurrencyData = retrieveLatestCurrencyData;
